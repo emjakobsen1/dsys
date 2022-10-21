@@ -2,17 +2,16 @@ package main
 
 import (
 	"bufio"
-	"crypto/sha256"
+
 	"flag"
 	"fmt"
-	"os"
-
-	"example.com/proto"
-
-	"encoding/hex"
 	"log"
+	"math/rand"
+	"os"
 	"sync"
 	"time"
+
+	"example.com/proto"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -49,7 +48,7 @@ func connect(user *proto.User) error {
 				break
 			}
 
-			fmt.Printf("%v : %s\n", user.Name, msg.Content)
+			fmt.Printf("%v : %s\n", msg.GetId(), msg.Content)
 
 		}
 	}(stream)
@@ -63,9 +62,8 @@ func main() {
 
 	name := flag.String("N", "Anon", "The name of the user")
 	flag.Parse()
-
-	id := sha256.Sum256([]byte(timestamp.String() + *name))
-
+	rand.Seed(time.Now().UnixNano())
+	id := rand.Intn(100)
 	conn, err := grpc.Dial("localhost:8080", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Couldnt connect to service: %v", err)
@@ -73,7 +71,7 @@ func main() {
 
 	client = proto.NewBroadcastClient(conn)
 	user := &proto.User{
-		Id:   hex.EncodeToString(id[:]),
+		Id:   fmt.Sprintf("%d", id),
 		Name: *name,
 	}
 
