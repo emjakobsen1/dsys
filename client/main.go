@@ -48,7 +48,7 @@ func connect(user *proto.User) error {
 				break
 			}
 
-			fmt.Printf("%v : %s\n", msg.GetId(), msg.Content)
+			fmt.Printf("%s #%v : %s\n", msg.GetUserName(), msg.GetId(), msg.GetContent())
 
 		}
 	}(stream)
@@ -60,7 +60,7 @@ func main() {
 	timestamp := time.Now()
 	done := make(chan int)
 
-	name := flag.String("N", "Anon", "The name of the user")
+	name := flag.String("N", "Anonymous user", "The name of the user")
 	flag.Parse()
 	rand.Seed(time.Now().UnixNano())
 	id := rand.Intn(100)
@@ -87,6 +87,7 @@ func main() {
 				Id:        user.Id,
 				Content:   scanner.Text(),
 				Timestamp: timestamp.String(),
+				UserName:  user.GetName(),
 			}
 
 			_, err := client.BroadcastMessage(context.Background(), msg)

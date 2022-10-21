@@ -161,5 +161,5 @@ var Broadcast_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "proto/service.proto",
+	Metadata: "service.proto",
 }
