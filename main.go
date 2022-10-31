@@ -4,7 +4,6 @@ import (
 	"log"
 	"net"
 	"sync"
-	"time"
 
 	"example.com/proto"
 
@@ -33,7 +32,7 @@ func (s *Server) CreateStream(pconn *proto.Connect, stream proto.Broadcast_Creat
 	}
 
 	s.Connection = append(s.Connection, conn)
-
+	log.Println("CreateStream: ", conn)
 	return <-conn.error
 }
 
@@ -49,8 +48,8 @@ func (s *Server) BroadcastMessage(ctx context.Context, msg *proto.Message) (*pro
 
 			if conn.active {
 				err := conn.stream.Send(msg)
-				log.Println(time.Now())
-				log.Println("Sending message to: ", conn.stream)
+
+				log.Println("Broadcasting message to: ", conn.stream, msg)
 
 				if err != nil {
 					log.Fatalf("Error with Stream: %v - Error: %v", conn.stream, err)
@@ -68,22 +67,22 @@ func (s *Server) BroadcastMessage(ctx context.Context, msg *proto.Message) (*pro
 	}()
 
 	<-done
+	log.Println("Close: ")
 	return &proto.Close{}, nil
+
 }
 
 func main() {
 	var connections []*Connection
-
-	//server := &Server{connections}
-
 	grpcServer := grpc.NewServer()
 	listener, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("error creating the server %v", err)
 	}
 
-	log.Println("Starting server at port :8080")
-
-	proto.RegisterBroadcastServer(grpcServer, &Server{connections, proto.UnimplementedBroadcastServer{}})
+	log.Println("Starting Chitty-Chat at port :8080")
+	server := &Server{connections, proto.UnimplementedBroadcastServer{}}
+	proto.RegisterBroadcastServer(grpcServer, server)
+	log.Println("RegisterBroadcastServer: ", grpcServer, server)
 	grpcServer.Serve(listener)
 }

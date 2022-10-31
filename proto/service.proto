@@ -6,11 +6,12 @@ option go_package = "https://example.com/;proto";
 message User {
     string id = 1;
     string name = 2;
+    int32 t = 3;
 }
 message Message {
     string id = 1;
     string content = 2;
-    string timestamp = 3;
+    int32 timestamp = 3;
     string userName = 4;
 }
 message Connect {
