@@ -11,6 +11,6 @@ In another terminal, Change directory to the client repository, and start initia
 ``` 
 go run main.go -name <yourName>
 ```
-The flag ```-name <yourName>``` is optional. 
+The flag ```-name``` followed by a custom name is optional. 
 
 You can now chat via the command line. To end a client, type ```-close```. 
