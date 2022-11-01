@@ -11,4 +11,4 @@ Change directory to the client repository, and start the clients with
 ``` 
 go run main.go -name <yourName>
 ```
-The flag -name <yourName> is optional. 
+The flag -name followed by your custom name is optional. 
