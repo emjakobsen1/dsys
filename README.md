@@ -1,7 +1,8 @@
 ### ChittyChat
-##### About
+#### About
 *ChittyChat* is a console-based chat service that lets multiple clients communicate through a server. It is implemented in Go and uses gRPC for passing messages between participants. It computes and logs Lamport timestamps throughout the lifetime of clients.
 
+#### Running the application
 Clone the project to a local repository. From the root repository, open a terminal and run the server with 
 
 ```
